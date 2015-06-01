@@ -22,7 +22,7 @@ namespace EmgTools.EmgLogger
                     writer.WriteLine("Epoch, S1, S2, S3, S4, S5, S6");
                     shield.DataReceived += (o, e) =>
                     {
-                        writer.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}", e.Epoch, e.Message[0], e.Message[1], e.Message[2], e.Message[3], e.Message[4], e.Message[5], e.Message[6]);
+                        writer.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}, {6}", e.Epoch, e.Message[0], e.Message[1], e.Message[2], e.Message[3], e.Message[4], e.Message[5]);
                     };
 
                     shield.Open();
