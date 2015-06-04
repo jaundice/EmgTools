@@ -27,6 +27,11 @@ namespace EmgTools.IO.OlimexShield
 
         private ushort ReadBigEndian(int index)
         {
+            if (index > 5 || index < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             fixed (ushort* data = RawData)
             {
                 var raw = data[index];

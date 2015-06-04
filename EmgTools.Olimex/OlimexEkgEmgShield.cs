@@ -10,7 +10,7 @@ namespace EmgTools.IO.OlimexShield
         private readonly byte[] _buffer = new byte[17];
         private readonly object _lock = new object();
         private readonly SerialPort _serialPort;
-        private long epoch;
+        private long _epoch;
 
         public OlimexEkgEmgShield(string portName)
         {
@@ -50,9 +50,8 @@ namespace EmgTools.IO.OlimexShield
         private void Sync()
         {
             _serialPort.DataReceived -= sp_DataReceived;
-            epoch = 0;
             _serialPort.DiscardInBuffer();
-
+            _epoch = 0;
             while (true)
             {
                 while (_serialPort.ReadByte() != 0xa5)
@@ -92,11 +91,12 @@ namespace EmgTools.IO.OlimexShield
 
                     if (message.Sync0 == 0xa5 && message.Sync1 == 0x5a)
                     {
-                        OnDataReceived(new ShieldDataReceivedEventArgs(Interlocked.Increment(ref epoch), message));
+                        OnDataReceived(new ShieldDataReceivedEventArgs(Interlocked.Increment(ref _epoch), message));
                     }
                     else
                     {
                         Console.WriteLine("Invalid Packet");
+                        OnDataReceived(new ShieldDataReceivedEventArgs(Interlocked.Increment(ref _epoch), new EkgEmgShieldEvent()));
                         Sync();
                     }
                 }
